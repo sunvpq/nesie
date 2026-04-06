@@ -65,13 +65,13 @@ SECRET_KEY=your-secret-key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 REFRESH_TOKEN_EXPIRE_DAYS=30
+ANTHROPIC_API_KEY=sk-ant-...   # для AI-объяснений в симуляторе
 ```
 
 ### Frontend (`frontend/.env`)
 
 ```
 VITE_API_BASE_URL=http://localhost:8000
-VITE_ANTHROPIC_API_KEY=sk-ant-...   # для AI-объяснений в симуляторе
 ```
 
 ## Лицензия

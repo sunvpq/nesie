@@ -76,7 +76,7 @@ export default function SimulatorResult({ result, onExplainClick, aiExplanation,
       amount: `үлкен несие сомасы (${formatTenge(result.totalPaid - result.overpayment)})`,
       type_micro: 'микроқарыз — жоғары тәуекел',
       type_consumer: 'тұтыну несиесі',
-      type_mortgage: 'и��отека (оң)',
+      type_mortgage: 'ипотека (оң)',
     },
   }
   const bl = breakdownLabels[lang] || breakdownLabels.ru
@@ -136,7 +136,7 @@ export default function SimulatorResult({ result, onExplainClick, aiExplanation,
       top: 'мақұлдайды',
       mid: 'мақұлдауы мүмкін',
       low: 'тек МФО — жоғары тәуекел',
-      rejected: 'бас тарту ықтималдығы жо��ары',
+      rejected: 'бас тарту ықтималдығы жоғары',
       approvalTitle: 'Банктердің мақұлдауы',
       approvalChance: 'Мақұлдау ықтималдығы',
     },
@@ -163,7 +163,7 @@ export default function SimulatorResult({ result, onExplainClick, aiExplanation,
         </div>
       </div>
 
-      {/* SECTION A — Условия креди��а */}
+      {/* SECTION A — Условия кредита */}
       <div className="rounded-2xl p-5" style={{ backgroundColor: bg, border: `1px solid ${border}` }}>
         <h3 className="text-xs font-semibold uppercase tracking-wide mb-4" style={{ color: muted }}>
           {lang === 'kk' ? 'Несие шарттары' : 'Условия кредита'}
@@ -171,7 +171,7 @@ export default function SimulatorResult({ result, onExplainClick, aiExplanation,
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-sm" style={{ color: isDark ? '#999' : '#666' }}>
-              {lang === 'kk' ? 'Пайыздық мөлшерлеме' : 'Процентная ��тавка'}
+              {lang === 'kk' ? 'Пайыздық мөлшерлеме' : 'Процентная ставка'}
             </span>
             <span className="font-semibold text-sm" style={{ color: text }}>
               {Math.round(result.annualRate * 100)}% {lang === 'kk' ? 'жылдық' : 'годовых'}
@@ -189,7 +189,7 @@ export default function SimulatorResult({ result, onExplainClick, aiExplanation,
           <div className="h-px" style={{ backgroundColor: border }} />
           <div className="flex justify-between items-center">
             <span className="text-sm" style={{ color: isDark ? '#999' : '#666' }}>
-              {lang === 'kk' ? 'Жалпы төлем' : 'О��щая выплат��'}
+              {lang === 'kk' ? 'Жалпы төлем' : 'Общая выплата'}
             </span>
             <span className="font-semibold text-sm" style={{ color: text }}>
               {formatTenge(result.totalPaid)}

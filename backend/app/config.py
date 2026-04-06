@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     MOBIZON_API_KEY: Optional[str] = None
     MOBIZON_SENDER: str = "Nesie"
+    ANTHROPIC_API_KEY: Optional[str] = None
     DEBUG: bool = True
 
     class Config:

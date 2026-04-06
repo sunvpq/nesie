@@ -7,6 +7,7 @@ import { formatMoney, clamp } from '../utils/formatters'
 import { BarChart2 } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
+import client from '../api/client'
 
 function amountToTiyn(tenge: number) {
   return Math.round(tenge * 100)
@@ -76,61 +77,30 @@ export default function Simulator() {
     setIsLoadingAI(true)
     setAiExplanation(null)
 
-    const loanTypeLabels: Record<string, string> = {
-      consumer: 'потребительский',
-      auto: 'автокредит',
-      mortgage: 'ипотека',
-      micro: 'микрозайм',
-    }
-
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '',
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: `Ты финансовый советник приложения Nesie для казахстанских пользователей. Отвечай на ${lang === 'kk' ? 'казахском' : 'русском'} языке. Будь конкретным, используй реальные цифры из расчёта. Не используй общие фразы. Дай один чёткий совет что делать.`,
-          messages: [{
-            role: 'user',
-            content: `Пользователь хочет взять кредит. Вот данные:
-Текущий скор: ${calcResult.currentScore}
-Тип кредита: ${loanTypeLabels[loanType] || loanType}
-Сумма: ${amountTenge} тенге
-Ставка: ${Math.round(calcResult.annualRate * 100)}%
-Ежемесячный платёж: ${calcResult.monthlyPayment} тенге
-Переплата: ${calcResult.overpayment} тенге
-Текущий DTI: ${Math.round(calcResult.oldDTI * 100)}%
-Новый DTI: ${Math.round(calcResult.newDTI * 100)}%
-Скор после: ${calcResult.projectedScore} (падение на ${Math.abs(calcResult.scoreDelta)})
-Вердикт системы: ${calcResult.verdict}
-Месячный доход: ${incomeTenge} тенге
-Текущие кредитные платежи: ${currentMonthlyPayments} тенге/мес
-
-Объясни простым языком что это значит для этого человека и что ему стоит сделать. Максимум 4 предложения.`,
-          }],
-        }),
+      const response = await client.post('/simulator/ai-explain', {
+        current_score: calcResult.currentScore,
+        loan_type: loanType,
+        amount: amountTenge,
+        annual_rate: Math.round(calcResult.annualRate * 100),
+        monthly_payment: calcResult.monthlyPayment,
+        overpayment: calcResult.overpayment,
+        old_dti: Math.round(calcResult.oldDTI * 100),
+        new_dti: Math.round(calcResult.newDTI * 100),
+        projected_score: calcResult.projectedScore,
+        score_delta: calcResult.scoreDelta,
+        verdict: calcResult.verdict,
+        monthly_income: incomeTenge,
+        current_monthly_payments: currentMonthlyPayments,
+        lang,
       })
-      const data = await response.json()
-      if (data.content?.[0]?.text) {
-        setAiExplanation(data.content[0].text)
-      } else if (data.error) {
-        setAiExplanation(
-          lang === 'kk'
-            ? 'AI қызметіне қосылу мүмкін болмады. API кілтін тексеріңіз.'
-            : 'Не удалось подключиться к AI-сервису. Проверьте API ключ.',
-        )
-      }
-    } catch {
+      setAiExplanation(response.data.explanation)
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail
       setAiExplanation(
-        lang === 'kk'
-          ? 'AI қызметіне қосылу мүмкін болмады. Интернет байланысын тексеріңіз.'
-          : 'Не удалось подключиться к AI-сервису. Проверьте интернет-соединение.',
+        detail || (lang === 'kk'
+          ? 'AI қызметіне қосылу мүмкін болмады. Кейінірек қайталап көріңіз.'
+          : 'Не удалось подключиться к AI-сервису. Попробуйте позже.'),
       )
     } finally {
       setIsLoadingAI(false)

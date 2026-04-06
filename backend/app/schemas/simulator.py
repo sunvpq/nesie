@@ -38,6 +38,27 @@ class SimulatorRequest(BaseModel):
         return v
 
 
+class AIExplainRequest(BaseModel):
+    current_score: int
+    loan_type: str
+    amount: int  # tenge
+    annual_rate: int  # percent
+    monthly_payment: int  # tenge
+    overpayment: int  # tenge
+    old_dti: int  # percent
+    new_dti: int  # percent
+    projected_score: int
+    score_delta: int
+    verdict: str
+    monthly_income: int  # tenge
+    current_monthly_payments: int  # tenge
+    lang: str = "ru"
+
+
+class AIExplainResponse(BaseModel):
+    explanation: str
+
+
 class SimulatorResult(BaseModel):
     score_before: int
     score_after: int
