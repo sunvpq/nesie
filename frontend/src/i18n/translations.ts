@@ -24,9 +24,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'home.connectPKBBanner': 'Подключите ПКБ',
     'home.enterIINForData': 'Введите ИИН, чтобы получить реальные данные кредитной истории',
     'home.whatAffects': 'Что влияет на рейтинг',
-    'home.amongFriends': 'Среди друзей',
-    'home.friendsPlace': 'Вы на {place} месте среди {count} друзей',
-    'home.you': 'Вы',
 
     // Score grades
     'grade.excellent': 'Отличный',
@@ -95,14 +92,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.themeSub': 'Оформление приложения',
     'profile.downloadReport': 'Скачать отчёт',
     'profile.downloadReportSub': 'PDF отчёт по кредитной истории',
-    'profile.referral': 'Реферальная программа',
-    'profile.referralSub': 'Пригласи друга — получи 1 месяц Pro',
-    'profile.referralShare': 'Следи за своим кредитным рейтингом с Nesie!',
     'profile.freePlan': 'Бесплатный план',
     'profile.allFeatures': 'Все функции доступны',
     'profile.upgradeForAccess': 'Обновите для полного доступа',
-    'profile.inviteFriend': 'Пригласи друга — получи',
-    'profile.oneMonthFree': '1 месяц Pro бесплатно',
     'profile.logout': 'Выйти из аккаунта',
     'profile.connectPro': 'Подключить Nesie Pro',
 
@@ -209,8 +201,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'home.enterIINForData': 'Несие тарихының нақты деректерін алу үшін ЖСН енгізіңіз',
     'home.whatAffects': 'Рейтингке не әсер етеді',
     'home.amongFriends': 'Достар арасында',
-    'home.friendsPlace': 'Сіз 12 достың ішінде {place}-орындасыз',
-    'home.you': 'Сіз',
 
     // Score grades
     'grade.excellent': 'Өте жақсы',
@@ -279,14 +269,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.themeSub': 'Қолданба безендіруі',
     'profile.downloadReport': 'Есепті жүктеу',
     'profile.downloadReportSub': 'Несие тарихы бойынша PDF есеп',
-    'profile.referral': 'Реферал бағдарламасы',
-    'profile.referralSub': 'Досыңды шақыр — 1 ай Pro ал',
-    'profile.referralShare': 'Nesie арқылы несие рейтингіңді бақыла!',
     'profile.freePlan': 'Тегін жоспар',
     'profile.allFeatures': 'Барлық функциялар қол жетімді',
     'profile.upgradeForAccess': 'Толық қол жеткізу үшін жаңартыңыз',
-    'profile.inviteFriend': 'Досыңды шақыр —',
-    'profile.oneMonthFree': '1 ай Pro тегін',
     'profile.logout': 'Аккаунттан шығу',
     'profile.connectPro': 'Nesie Pro қосу',
 

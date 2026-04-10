@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.database import init_db
-from app.routers import auth, score, loans, simulator, user, social
+from app.routers import auth, score, loans, simulator, user
 
 
 @asynccontextmanager
@@ -38,7 +38,6 @@ app.include_router(score.router, prefix="/api")
 app.include_router(loans.router, prefix="/api")
 app.include_router(simulator.router, prefix="/api")
 app.include_router(user.router, prefix="/api")
-app.include_router(social.router, prefix="/api")
 
 
 @app.get("/")

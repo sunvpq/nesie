@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nesie — Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0A;--card:#111111;--green:#AAFF00;--white:#FFFFFF;--gray:#888888;--red:#FF4444;--yellow:#FFCC00;--font-head:'Unbounded',sans-serif;--font-body:'Inter',sans-serif}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-x:hidden}
+body{background:var(--bg);color:var(--white);font-family:var(--font-body);overflow-x:hidden}
+.slide{width:100vw;height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:40px 60px}
+.slide-inner{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease;width:100%;max-width:1200px;display:flex;flex-direction:column;align-items:center}
+.slide-inner.visible{opacity:1;transform:translateY(0)}
+h1,h2,h3{font-family:var(--font-head)}
+h2{font-size:clamp(28px,3.5vw,48px);margin-bottom:40px;text-align:center}
+.counter{position:fixed;bottom:24px;right:32px;font-family:var(--font-body);font-size:14px;color:var(--gray);z-index:100;background:rgba(10,10,10,.8);padding:6px 14px;border-radius:20px;backdrop-filter:blur(8px)}
+.nav-btn{position:fixed;z-index:100;background:rgba(170,255,0,.12);border:1px solid rgba(170,255,0,.25);color:var(--green);width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.nav-btn:hover{background:rgba(170,255,0,.25)}
+.nav-up{bottom:24px;right:120px}
+.nav-down{bottom:24px;right:80px}
+.nav-btn svg{width:18px;height:18px;fill:currentColor}
+
+/* SLIDE 1 */
+.s1-logo{font-family:var(--font-head);font-size:clamp(72px,10vw,140px);font-weight:900;color:var(--white);position:relative;z-index:2}
+.s1-pulse{position:absolute;width:260px;height:260px;border-radius:50%;background:var(--green);opacity:.15;animation:pulse 3s ease-in-out infinite;z-index:1}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.12}50%{transform:scale(1.35);opacity:.22}}
+.s1-sub{font-size:clamp(16px,2vw,24px);color:var(--gray);margin-top:16px;font-weight:300;z-index:2}
+.s1-tag{font-size:14px;color:var(--green);margin-top:24px;letter-spacing:2px;z-index:2}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;width:100%}
+.stat-card{background:var(--card);border:1px solid #222;border-radius:16px;padding:36px 28px;text-align:center;transition:border-color .3s}
+.stat-card:hover{border-color:var(--green)}
+.stat-number{font-family:var(--font-head);font-size:clamp(32px,4vw,52px);font-weight:900;color:var(--green);margin-bottom:8px}
+.stat-label{font-size:14px;color:var(--gray);line-height:1.5}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;width:100%;max-width:700px}
+.tl-item{display:flex;align-items:flex-start;gap:16px;position:relative;padding:16px 0}
+.tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:4px;position:relative;z-index:2}
+.tl-line{position:relative}
+.tl-line::before{content:'';position:absolute;left:6px;top:22px;width:2px;height:calc(100%);background:#333;z-index:1}
+.tl-item:last-child .tl-line::before{display:none}
+.tl-content{flex:1}
+.tl-month{font-weight:600;font-size:14px;margin-bottom:4px}
+.tl-desc{font-size:15px;line-height:1.5;color:var(--gray)}
+.tl-score{font-family:var(--font-head);font-weight:700;font-size:13px;margin-left:8px}
+
+/* PROBLEM CARDS */
+.problem-cards{display:flex;flex-direction:column;gap:20px;width:100%;max-width:800px}
+.problem-card{background:var(--card);border:1px solid #222;border-radius:16px;padding:32px;font-size:clamp(15px,1.5vw,19px);line-height:1.6;transition:border-color .3s}
+.problem-card:hover{border-color:var(--green)}
+.problem-card .emoji{font-size:28px;margin-bottom:12px;display:block}
+
+/* PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;width:100%;margin-top:32px}
+.pillar{background:var(--card);border:1px solid #222;border-radius:16px;padding:32px 24px;text-align:center}
+.pillar h3{font-size:18px;margin-bottom:8px;color:var(--green)}
+.pillar p{font-size:14px;color:var(--gray)}
+
+/* BIG LOGO */
+.big-logo{font-family:var(--font-head);font-size:clamp(56px,8vw,100px);font-weight:900;color:var(--white);margin-bottom:16px}
+.big-tagline{font-size:clamp(14px,1.5vw,20px);color:var(--gray);text-align:center;max-width:600px;line-height:1.6;margin-bottom:32px}
+
+/* PHONES */
+.phones{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.phone{width:220px;height:420px;background:#000;border:3px solid #333;border-radius:28px;overflow:hidden;position:relative;flex-shrink:0}
+.phone-notch{width:80px;height:24px;background:#000;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;border:2px solid #333;border-top:none}
+.phone-screen{padding:40px 16px 16px;height:100%;display:flex;flex-direction:column;align-items:center}
+.phone-label{font-size:12px;color:var(--gray);margin-top:12px;text-align:center}
+.score-ring{width:120px;height:120px;border-radius:50%;border:8px solid var(--green);display:flex;align-items:center;justify-content:center;margin:20px auto 8px}
+.score-ring span{font-family:var(--font-head);font-size:36px;font-weight:900;color:var(--green)}
+.score-label{font-size:11px;color:var(--gray);text-align:center}
+.loan-item{background:#1a1a1a;border-radius:10px;padding:10px 12px;margin-bottom:8px;width:100%;font-size:11px;display:flex;justify-content:space-between}
+.loan-item span:last-child{color:var(--green);font-weight:600}
+.loan-total{font-size:13px;font-weight:700;color:var(--green);margin-top:8px;text-align:center}
+.sim-box{background:#1a1a1a;border-radius:12px;padding:14px;width:100%;margin-top:12px;text-align:center}
+.sim-box .before,.sim-box .after{font-family:var(--font-head);font-size:28px;font-weight:700}
+.sim-box .before{color:var(--green)}
+.sim-box .after{color:var(--yellow)}
+.sim-arrow{font-size:20px;margin:4px 0;color:var(--gray)}
+.sim-label{font-size:10px;color:var(--gray);margin-top:2px}
+
+/* TABLE */
+.comp-table{width:100%;max-width:800px;border-collapse:collapse;font-size:clamp(13px,1.3vw,16px)}
+.comp-table th,.comp-table td{padding:14px 16px;text-align:center;border-bottom:1px solid #222}
+.comp-table th{font-family:var(--font-head);font-weight:700;font-size:clamp(14px,1.4vw,18px);color:var(--gray)}
+.comp-table th:last-child{color:var(--green)}
+.comp-table td:first-child{text-align:left;color:var(--gray);font-weight:500}
+.comp-table .nesie-col{background:rgba(170,255,0,.06);color:var(--green);font-weight:700}
+.comp-table .check{color:var(--green)}
+.comp-table .cross{color:#555}
+.comp-table .paid{color:var(--yellow);font-size:12px}
+
+/* REVENUE */
+.revenue-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;width:100%}
+.rev-card{background:var(--card);border:1px solid #222;border-radius:16px;padding:32px 24px}
+.rev-card h3{font-family:var(--font-head);font-size:18px;color:var(--green);margin-bottom:8px}
+.rev-card .price{font-size:14px;color:var(--white);margin-bottom:8px;font-weight:600}
+.rev-card p{font-size:13px;color:var(--gray);line-height:1.5}
+.rev-big{font-family:var(--font-head);font-size:clamp(20px,2.5vw,36px);color:var(--green);text-align:center;margin-top:32px;font-weight:900}
+.rev-big-sub{color:var(--gray);font-size:14px;text-align:center;margin-top:8px}
+
+/* TRACTION */
+.traction-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;width:100%;max-width:900px}
+@media(max-width:700px){.traction-grid{grid-template-columns:1fr}}
+.check-list{list-style:none}
+.check-list li{padding:10px 0;font-size:15px;color:var(--gray);border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:10px}
+.check-list li::before{content:'✓';color:var(--green);font-weight:700;font-size:18px}
+.tech-badges{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+.badge{background:var(--card);border:1px solid #222;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--gray)}
+
+/* CLOSING */
+.closing-nums{display:flex;flex-direction:column;gap:24px;align-items:center}
+.closing-row{text-align:center}
+.closing-big{font-family:var(--font-head);font-size:clamp(48px,7vw,96px);font-weight:900;color:var(--green)}
+.closing-label{font-size:clamp(14px,1.5vw,20px);color:var(--gray);margin-top:4px}
+.closing-footer{position:absolute;bottom:40px;font-size:14px;color:var(--gray);text-align:center}
+
+@media(max-width:768px){
+  .slide{padding:24px 20px}
+  .phones{gap:16px}
+  .phone{width:160px;height:320px;border-radius:20px}
+  .phone-notch{width:60px;height:18px;border-radius:0 0 10px 10px}
+  .score-ring{width:80px;height:80px;border-width:6px}
+  .score-ring span{font-size:24px}
+  .traction-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1 — COVER -->
+<div class="slide" id="s1">
+  <div class="slide-inner">
+    <div class="s1-pulse"></div>
+    <div class="s1-logo">Nesie</div>
+    <div class="s1-sub">Кредитный рейтинг под контролем</div>
+    <div class="s1-tag">Финтех стартап · Атырау · 2026</div>
+  </div>
+</div>
+
+<!-- SLIDE 2 — STATISTICS -->
+<div class="slide" id="s2">
+  <div class="slide-inner">
+    <h2>Казахстан в долгах</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number" data-target="10.2" data-suffix=" млн" data-decimal="1">0</div><div class="stat-label">активных заёмщиков</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="2.3" data-suffix="" data-decimal="1">0</div><div class="stat-label">кредита на одного человека</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="14.7" data-suffix=" трлн ₸" data-decimal="1">0</div><div class="stat-label">объём кредитования</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="34" data-suffix="%" data-decimal="0">0</div><div class="stat-label">казахстанцев — долговая нагрузка выше 50% дохода</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3 — HUMAN STORY -->
+<div class="slide" id="s3">
+  <div class="slide-inner">
+    <h2>История Адила, 26 лет, Атырау</h2>
+    <div class="timeline">
+      <div class="tl-item tl-line">
+        <div class="tl-dot" style="background:var(--green)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Январь <span class="tl-score" style="color:var(--green)">Скор: 680 ✓</span></div>
+          <div class="tl-desc">Взял кредит на телефон</div>
+        </div>
+      </div>
+      <div class="tl-item tl-line">
+        <div class="tl-dot" style="background:var(--yellow)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Март <span class="tl-score" style="color:var(--yellow)">Скор: 650 (не знает)</span></div>
+          <div class="tl-desc">Помог сестре, взял ещё один кредит</div>
+        </div>
+      </div>
+      <div class="tl-item tl-line">
+        <div class="tl-dot" style="background:var(--yellow)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Июнь <span class="tl-score" style="color:var(--yellow)">Скор: 590 (не знает)</span></div>
+          <div class="tl-desc">Кредит на холодильник</div>
+        </div>
+      </div>
+      <div class="tl-item tl-line">
+        <div class="tl-dot" style="background:var(--red)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Август <span class="tl-score" style="color:var(--red)">Скор: 530 (не знает)</span></div>
+          <div class="tl-desc">Просрочил платёж на 12 дней</div>
+        </div>
+      </div>
+      <div class="tl-item tl-line">
+        <div class="tl-dot" style="background:var(--red)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Ноябрь <span class="tl-score" style="color:var(--red)">ОТКАЗ ✗</span></div>
+          <div class="tl-desc">Подал на автокредит — отказано</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--red)"></div>
+        <div class="tl-content">
+          <div class="tl-month">Ноябрь (тот же день) <span class="tl-score" style="color:var(--red)">МФО 98% годовых</span></div>
+          <div class="tl-desc">Пошёл в МФО — долговая ловушка</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4 — ROOT CAUSE -->
+<div class="slide" id="s4">
+  <div class="slide-inner">
+    <h2>Люди узнают о проблеме когда уже поздно</h2>
+    <div class="problem-cards">
+      <div class="problem-card"><span class="emoji">🔒</span>Скор существует — но скрыт. ПКБ берёт 400₸ и требует ручного запроса через неудобный сайт.</div>
+      <div class="problem-card"><span class="emoji">🏦</span>Кредиты в разных банках — нет единой картины. Человек не видит общую нагрузку.</div>
+      <div class="problem-card"><span class="emoji">⚠️</span>Никто не предупреждает до того, как нажал «Оформить». Решение принимается вслепую.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5 — SOLUTION -->
+<div class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="big-logo">Nesie</div>
+    <div class="big-tagline">Первое приложение, которое показывает казахстанцам их реальное финансовое здоровье</div>
+    <div class="pillars">
+      <div class="pillar"><h3>Живой скор из ПКБ</h3><p>Актуальный кредитный рейтинг в одно касание</p></div>
+      <div class="pillar"><h3>Все кредиты в одном месте</h3><p>Единая картина долговой нагрузки</p></div>
+      <div class="pillar"><h3>Симулятор последствий</h3><p>Увидь как изменится скор до оформления</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6 — PRODUCT DEMO -->
+<div class="slide" id="s6">
+  <div class="slide-inner">
+    <h2>Как это выглядит</h2>
+    <div class="phones">
+      <!-- Phone 1: Score -->
+      <div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Кредитный скор</div>
+            <div class="score-ring"><span>714</span></div>
+            <div class="score-label">Хороший</div>
+            <div style="margin-top:16px;font-size:10px;color:var(--gray);width:100%">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Платежи вовремя</span><span style="color:var(--green)">96%</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Нагрузка</span><span style="color:var(--yellow)">42%</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Кредитов</span><span style="color:var(--white)">3</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">Скор</div>
+      </div>
+      <!-- Phone 2: Loans -->
+      <div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div style="font-size:11px;color:var(--gray);margin-bottom:12px;width:100%">Мои кредиты</div>
+            <div class="loan-item"><span>Kaspi — телефон</span><span>142 000 ₸</span></div>
+            <div class="loan-item"><span>Halyk — нал.</span><span>580 000 ₸</span></div>
+            <div class="loan-item"><span>Forte — холод.</span><span>215 000 ₸</span></div>
+            <div class="loan-total">Итого: 937 000 ₸</div>
+            <div style="font-size:10px;color:var(--gray);margin-top:12px">Ежемесячный платёж: 48 200 ₸</div>
+          </div>
+        </div>
+        <div class="phone-label">Кредиты</div>
+      </div>
+      <!-- Phone 3: Simulator -->
+      <div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div style="font-size:11px;color:var(--gray);margin-bottom:8px;width:100%">Симулятор</div>
+            <div style="font-size:10px;color:var(--gray);margin-bottom:8px">Новый кредит: 500 000 ₸</div>
+            <div class="sim-box">
+              <div class="sim-label">СЕЙЧАС</div>
+              <div class="before">714</div>
+              <div class="sim-arrow">↓</div>
+              <div class="sim-label">ПОСЛЕ</div>
+              <div class="after">658</div>
+            </div>
+            <div style="margin-top:12px;font-size:10px;color:var(--red);text-align:center">⚠ Скор упадёт на 56 пунктов</div>
+            <div style="margin-top:8px;font-size:9px;color:var(--gray);text-align:center;line-height:1.4">Нагрузка вырастет до 61% — риск отказов в будущем</div>
+          </div>
+        </div>
+        <div class="phone-label">Симулятор</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7 — COMPETITIVE ADVANTAGE -->
+<div class="slide" id="s7">
+  <div class="slide-inner">
+    <h2>Чего нет ни у кого</h2>
+    <table class="comp-table">
+      <thead>
+        <tr><th></th><th>Kaspi</th><th>ПКБ сайт</th><th>Nesie</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Живой скор</td><td class="cross">✗</td><td class="paid">платно</td><td class="nesie-col">✓</td></tr>
+        <tr><td>Все банки</td><td class="cross">✗</td><td class="check">✓</td><td class="nesie-col">✓</td></tr>
+        <tr><td>Симулятор</td><td class="cross">✗</td><td class="cross">✗</td><td class="nesie-col">✓</td></tr>
+        <tr><td>AI советник</td><td class="cross">✗</td><td class="cross">✗</td><td class="nesie-col">✓</td></tr>
+        <tr><td>Бесплатно</td><td class="cross">✗</td><td class="cross">✗</td><td class="nesie-col">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SLIDE 8 — BUSINESS MODEL -->
+<div class="slide" id="s8">
+  <div class="slide-inner">
+    <h2>Как Nesie зарабатывает</h2>
+    <div class="revenue-cards">
+      <div class="rev-card">
+        <h3>💎 Подписка Pro</h3>
+        <div class="price">990 ₸/месяц</div>
+        <p>Симулятор, уведомления, AI советник</p>
+      </div>
+      <div class="rev-card">
+        <h3>🏦 Лидогенерация</h3>
+        <div class="price">2 000–8 000 ₸ за лид</div>
+        <p>Банки платят за pre-qualified заёмщиков</p>
+      </div>
+      <div class="rev-card">
+        <h3>📈 Кредитный продукт</h3>
+        <div class="price">Year 2</div>
+        <p>Лучшая скоринговая модель в Казахстане</p>
+      </div>
+    </div>
+    <div class="rev-big">10 000 подписчиков = 9.9 млн ₸/мес</div>
+    <div class="rev-big-sub">Только на подписках, без лидогенерации</div>
+  </div>
+</div>
+
+<!-- SLIDE 9 — TRACTION -->
+<div class="slide" id="s9">
+  <div class="slide-inner">
+    <h2>Что уже построено</h2>
+    <div class="traction-grid">
+      <div>
+        <ul class="check-list">
+          <li>Работающий MVP (фронтенд + бэкенд)</li>
+          <li>Авторизация по номеру телефона</li>
+          <li>Симулятор с реальными расчётами</li>
+          <li>AI объяснение через Claude API</li>
+          <li>Интерфейс на русском и казахском</li>
+          <li>Тёмная и светлая тема</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:14px;color:var(--gray);margin-bottom:16px;font-family:var(--font-head)">Tech Stack</h3>
+        <div class="tech-badges">
+          <span class="badge">React</span>
+          <span class="badge">FastAPI</span>
+          <span class="badge">PostgreSQL</span>
+          <span class="badge">Claude AI</span>
+          <span class="badge">Supabase</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10 — CLOSING -->
+<div class="slide" id="s10">
+  <div class="slide-inner">
+    <div class="closing-nums">
+      <div class="closing-row">
+        <div class="closing-big">10.2 млн</div>
+        <div class="closing-label">казахстанцев берут кредиты</div>
+      </div>
+      <div class="closing-row">
+        <div class="closing-big">0</div>
+        <div class="closing-label">приложений показывающих реальный скор бесплатно</div>
+      </div>
+      <div class="closing-row">
+        <div class="closing-big">1</div>
+        <div class="closing-label">Nesie</div>
+      </div>
+    </div>
+    <div class="closing-footer">Байқауға қатысушы: [ИМЯ]&nbsp;&nbsp;|&nbsp;&nbsp;Атырау, 2026</div>
+  </div>
+</div>
+
+<div class="counter" id="counter">1 / 10</div>
+<button class="nav-btn nav-up" id="navUp" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></button>
+<button class="nav-btn nav-down" id="navDown" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></button>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  function goTo(i){
+    if(i<0)i=0;if(i>=total)i=total-1;
+    current=i;
+    slides[i].scrollIntoView({behavior:'smooth'});
+  }
+
+  // Intersection observer for animations
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const inner = e.target.querySelector('.slide-inner');
+        if(inner) inner.classList.add('visible');
+        // Update counter
+        const idx = Array.from(slides).indexOf(e.target);
+        if(idx>=0){current=idx;counter.textContent=(idx+1)+' / '+total}
+        // Animate stat numbers on slide 2
+        if(e.target.id==='s2') animateStats();
+      }
+    });
+  },{threshold:0.5});
+
+  slides.forEach(s=>obs.observe(s));
+
+  // Counter animation for stats
+  let statsAnimated=false;
+  function animateStats(){
+    if(statsAnimated)return;statsAnimated=true;
+    document.querySelectorAll('.stat-number[data-target]').forEach(el=>{
+      const target=parseFloat(el.dataset.target);
+      const suffix=el.dataset.suffix||'';
+      const dec=parseInt(el.dataset.decimal)||0;
+      const duration=1500;
+      const start=performance.now();
+      function tick(now){
+        const p=Math.min((now-start)/duration,1);
+        const ease=1-Math.pow(1-p,3);
+        el.textContent=(target*ease).toFixed(dec)+suffix;
+        if(p<1)requestAnimationFrame(tick);
+        else el.textContent=target.toFixed(dec)+suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();goTo(current+1)}
+    if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();goTo(current-1)}
+  });
+
+  // Click to advance
+  document.addEventListener('click',e=>{
+    if(e.target.closest('.nav-btn'))return;
+    goTo(current+1);
+  });
+
+  // Nav buttons
+  document.getElementById('navUp').addEventListener('click',e=>{e.stopPropagation();goTo(current-1)});
+  document.getElementById('navDown').addEventListener('click',e=>{e.stopPropagation();goTo(current+1)});
+})();
+</script>
+</body>
+</html>

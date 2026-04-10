@@ -9,7 +9,7 @@ import { useScoreStore } from '../store/scoreStore'
 import { useAuthStore } from '../store/authStore'
 import { getScoreGrade } from '../utils/scoreUtils'
 import { formatMoney, formatDate } from '../utils/formatters'
-import { RefreshCw, ChevronRight, Trophy, TrendingUp } from 'lucide-react'
+import { RefreshCw, ChevronRight, TrendingUp } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
 
@@ -238,48 +238,6 @@ export default function Home() {
             </motion.div>
           )}
 
-          {/* Friends teaser */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="rounded-2xl p-5 mb-6"
-            style={{ backgroundColor: cardBg, border: `1px solid ${border}` }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Trophy size={16} color={accent} />
-              <h3
-                className="font-semibold text-sm"
-                style={{ color: text, fontFamily: "'Unbounded', sans-serif", fontSize: 13 }}
-              >
-                {t('home.amongFriends')}
-              </h3>
-            </div>
-            <p className="text-sm mb-4" style={{ color: muted }}>
-              {t('home.friendsPlace', { place: 3, count: 12 })}
-            </p>
-            <div className="flex gap-3">
-              {[
-                { initials: 'АК', score: 742, place: 1, isMe: false },
-                { initials: 'БМ', score: 718, place: 2, isMe: false },
-                { initials: t('home.you'), score: score, place: 3, isMe: true },
-              ].map((friend) => (
-                <div key={friend.place} className="flex-1 flex flex-col items-center gap-1.5">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold"
-                    style={{
-                      backgroundColor: friend.isMe ? accent : border,
-                      color: friend.isMe ? '#0A0A0A' : isDark ? '#999' : '#666',
-                    }}
-                  >
-                    {friend.initials}
-                  </div>
-                  <p className="text-xs font-medium" style={{ color: text }}>{friend.score}</p>
-                  <p className="text-[10px]" style={{ color: muted }}>#{friend.place}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
     </div>

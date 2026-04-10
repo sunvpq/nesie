@@ -8,7 +8,7 @@ import { formatPhone } from '../utils/formatters'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
 import {
-  Bell, Globe, FileText, Share2, Star,
+  Bell, Globe, FileText, Star,
   LogOut, ChevronRight, Sun, Moon, Palette,
 } from 'lucide-react'
 
@@ -106,20 +106,6 @@ export default function Profile() {
       action: () => setShowPaywall(true),
       isPro: true,
     },
-    {
-      icon: Share2,
-      label: t('profile.referral'),
-      sublabel: t('profile.referralSub'),
-      action: () => {
-        if (navigator.share) {
-          navigator.share({
-            title: 'Nesie',
-            text: t('profile.referralShare'),
-            url: 'https://nesie.kz',
-          })
-        }
-      },
-    },
   ]
 
   return (
@@ -214,16 +200,6 @@ export default function Profile() {
               )}
             </div>
 
-            {!user?.is_pro && (
-              <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${border}` }}>
-                <p className="text-xs text-center" style={{ color: muted }}>
-                  {t('profile.inviteFriend')}{' '}
-                  <span className="font-medium" style={{ color: accent }}>
-                    {t('profile.oneMonthFree')}
-                  </span>
-                </p>
-              </div>
-            )}
           </motion.div>
 
           {/* Settings */}

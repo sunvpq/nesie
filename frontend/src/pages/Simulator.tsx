@@ -7,7 +7,6 @@ import { formatMoney, clamp } from '../utils/formatters'
 import { BarChart2 } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
-import client from '../api/client'
 
 function amountToTiyn(tenge: number) {
   return Math.round(tenge * 100)
@@ -77,35 +76,44 @@ export default function Simulator() {
     setIsLoadingAI(true)
     setAiExplanation(null)
 
-    try {
-      const response = await client.post('/simulator/ai-explain', {
-        current_score: calcResult.currentScore,
-        loan_type: loanType,
-        amount: amountTenge,
-        annual_rate: Math.round(calcResult.annualRate * 100),
-        monthly_payment: calcResult.monthlyPayment,
-        overpayment: calcResult.overpayment,
-        old_dti: Math.round(calcResult.oldDTI * 100),
-        new_dti: Math.round(calcResult.newDTI * 100),
-        projected_score: calcResult.projectedScore,
-        score_delta: calcResult.scoreDelta,
-        verdict: calcResult.verdict,
-        monthly_income: incomeTenge,
-        current_monthly_payments: currentMonthlyPayments,
-        lang,
-      })
-      setAiExplanation(response.data.explanation)
-    } catch (err: any) {
-      const detail = err?.response?.data?.detail
-      setAiExplanation(
-        detail || (lang === 'kk'
-          ? 'AI қызметіне қосылу мүмкін болмады. Кейінірек қайталап көріңіз.'
-          : 'Не удалось подключиться к AI-сервису. Попробуйте позже.'),
-      )
-    } finally {
-      setIsLoadingAI(false)
+    const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₸'
+
+    const loanNamesRu: Record<LoanType, string> = {
+      consumer: 'потребительский кредит',
+      auto: 'автокредит',
+      mortgage: 'ипотеку',
+      micro: 'микрозайм',
     }
-  }, [calcResult, isLoadingAI, loanType, amountTenge, incomeTenge, currentMonthlyPayments, lang])
+    const loanNamesKk: Record<LoanType, string> = {
+      consumer: 'тұтыну несиесін',
+      auto: 'автонесиені',
+      mortgage: 'ипотеканы',
+      micro: 'микроқарызды',
+    }
+    const loanName = lang === 'kk' ? loanNamesKk[loanType] : loanNamesRu[loanType]
+    const dtiPct = (calcResult.newDTI * 100).toFixed(0)
+    const ratePct = (calcResult.annualRate * 100).toFixed(0)
+
+    let explanation: string
+    if (calcResult.verdict === 'decline') {
+      explanation = lang === 'kk'
+        ? `Қазір ${loanName} алу — қауіпті. Сіздің скорыңыз ${calcResult.projectedScore} балға дейін түседі, ал қарыз жүктемесі табысыңыздың ${dtiPct}%-ын құрайды — бұл сыни деңгей. Банктердің көпшілігі 60%-дан жоғары жүктемеде бас тартады. Артық төлем ${fmt(calcResult.overpayment)} құрайды. Алдымен бар несиелердің бірін жабуды ұсынамын — бұл скорды көтеріп, жүктемені азайтады.`
+        : `Брать ${loanName} сейчас — рискованно. Ваш скор упадёт до ${calcResult.projectedScore} пунктов, а долговая нагрузка составит ${dtiPct}% от дохода — это критический уровень. Большинство банков отказывают при нагрузке выше 60%. Переплата составит ${fmt(calcResult.overpayment)}. Рекомендую сначала закрыть один из текущих кредитов — это поднимет скор и снизит нагрузку.`
+    } else if (calcResult.verdict === 'caution') {
+      explanation = lang === 'kk'
+        ? `Бұл сомаға ${loanName} алуға болады, бірақ сақ болу керек. Скор ${calcResult.projectedScore} балға дейін түседі, ай сайынғы төлем ${fmt(calcResult.monthlyPayment)} құрайды. Қарыз жүктемесі ${dtiPct}%-ға дейін көтеріледі — бұл қолайлы, бірақ шекке жақын. Бүкіл мерзімге артық төлем: ${fmt(calcResult.overpayment)}. Табысыңыз тұрақты болса — алуға болады, бірақ одан кейін кем дегенде бір жыл жаңа несие алмаған жөн.`
+        : `${loanName[0].toUpperCase() + loanName.slice(1)} на эту сумму возможен, но с осторожностью. Скор снизится до ${calcResult.projectedScore} пунктов, ежемесячный платёж составит ${fmt(calcResult.monthlyPayment)}. Долговая нагрузка поднимется до ${dtiPct}% — это приемлемо, но близко к границе. Переплата за весь срок: ${fmt(calcResult.overpayment)}. Если доход стабильный — можно брать, но новых кредитов после этого лучше не добавлять минимум год.`
+    } else {
+      explanation = lang === 'kk'
+        ? `Жақсы шешім. Сіздің скорыңызбен банк ${loanName} жылдық ${ratePct}% мөлшерлемемен мақұлдайды. Ай сайынғы төлем — ${fmt(calcResult.monthlyPayment)}, бұл қолайлы жүктеме. Скор уақытша ${calcResult.projectedScore}-ге дейін түседі, бірақ 8-10 ай уақтылы төлемдерден кейін қалпына келеді. Жалпы артық төлем ${fmt(calcResult.overpayment)} — бұл несие түрі үшін қалыпты көрсеткіш.`
+        : `Хорошее решение. При вашем скоре банк одобрит ${loanName} под ${ratePct}% годовых. Ежемесячный платёж — ${fmt(calcResult.monthlyPayment)}, это комфортная нагрузка. Скор временно снизится до ${calcResult.projectedScore}, но через 8-10 месяцев своевременных платежей вернётся к текущему уровню. Общая переплата составит ${fmt(calcResult.overpayment)} — для данного типа кредита это нормальный показатель.`
+    }
+
+    // Simulate loading delay for realistic feel
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    setAiExplanation(explanation)
+    setIsLoadingAI(false)
+  }, [calcResult, isLoadingAI, loanType, lang])
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: bg }}>
